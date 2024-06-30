@@ -11,7 +11,10 @@ let plateFour: FoodPlatter = new FoodPlatter(41, new Set([]), "blue", "square");
 let plateFive: FoodPlatter = new FoodPlatter(41, new Set(["waffle", "banana", "whipped cream"]), "green", "triangle");
 let plateSix: FoodPlatter = new FoodPlatter(41, new Set(["bagel", "smoked-salmon", "cream-cheese", "capers"]), "blue","square");
 
-
+type PlateStats = {
+  platesTotal: number,
+  uniqueFoodTotal: number
+}
 
 export default function Foodbelt() {
 
@@ -19,34 +22,48 @@ export default function Foodbelt() {
   type platesRecord = Record<string, FoodPlatter>
   let plateBelt: [platesRecord];
   
-  plateBelt = [{"avo": plateTwo}]
+  plateBelt = [{ "avodish":plateTwo}]
   
+
   //function that adds plates to the best
   function addPlateToBelt(plateName: string, foodPlate: FoodPlatter): void{
     plateBelt = [{...plateBelt[0],[plateName]: foodPlate}]
   }  
   addPlateToBelt("eggDish", plateOne)
+
+  const  beltplatekeys: string[] = Object.keys(plateBelt[0]);
    
-  //remove oldest plate from the belt
-  function removeOldestBelt(): void{
-    const beltkeys: string[] = Object.keys(plateBelt[0]);
-
-    if (beltkeys.length != 0) {
-      //remove the first element of the keys
-      delete plateBelt[0][beltkeys[0]]
-    }
-  }
-  removeOldestBelt()
-
-  //list the number of plates in the belt 
-  function totalNumberOfPlate(): number{
+  // //remove oldest plate from the belt
+  // function removeOldestBelt(): void{
     
-  }
-
-
-  
-
+  //   if (beltplatekeys.length != 0) {
+  //     //remove the first element of the keys
+  //     delete plateBelt[0][beltplatekeys[0]]
+  //   }
+  // }
+  // removeOldestBelt()
  
+  //list the number of plates in the belt 
+  function totalNumberOfPlate():PlateStats{
+  
+    const uniqueFood: Set<string> = new Set(); 
+
+    //loop through the plates to access unique food, add them to set of unique food
+    for (let index = 0; index <  beltplatekeys.length; index++) {
+      const foodOnPlate: Set<string> = plateBelt[0][beltplatekeys[index]].food;
+
+      foodOnPlate.forEach((foodType) => {
+        uniqueFood.add(foodType);
+      })
+    }
+
+    return{
+      platesTotal: beltplatekeys.length,
+      uniqueFoodTotal: uniqueFood.size
+    } 
+  }
+  console.log(totalNumberOfPlate())
+  
   return (
     <>hello i am food belt component</>
   )
