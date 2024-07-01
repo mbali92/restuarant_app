@@ -1,5 +1,6 @@
 'use client';
 
+import { setInterval } from "timers/promises";
 import { FoodPlatter } from "./model/FoodPlatter";
 import { Plate } from "./model/Plate";
 
@@ -33,25 +34,30 @@ export default function Foodbelt() {
 
   const  beltplatekeys: string[] = Object.keys(plateBelt[0]);
    
-  // //remove oldest plate from the belt
-  // function removeOldestBelt(): void{
+  // //remove oldest or random plate from the belt
+  async function removePlateFromBelt(plateIndex:number):Promise<void>{
+    if (beltplatekeys.length != 0) {
+      //remove element based on index
+      delete plateBelt[0][beltplatekeys[plateIndex]]
+    }
+  }
+  
+  async function removeOldPlate() {
+    setInterval(async () => {
+      await removeOldPlate(0);
+    }, 10)
+  }
+  
+
     
-  //   if (beltplatekeys.length != 0) {
-  //     //remove the first element of the keys
-  //     delete plateBelt[0][beltplatekeys[0]]
-  //   }
-  // }
-  // removeOldestBelt()
- 
   //list the number of plates in the belt 
   function totalNumberOfPlate():PlateStats{
   
     const uniqueFood: Set<string> = new Set(); 
 
     //loop through the plates to access unique food, add them to set of unique food
-    for (let index = 0; index <  beltplatekeys.length; index++) {
+    for (let index = 0; index < beltplatekeys.length; index++) {
       const foodOnPlate: Set<string> = plateBelt[0][beltplatekeys[index]].food;
-
       foodOnPlate.forEach((foodType) => {
         uniqueFood.add(foodType);
       })
@@ -63,6 +69,10 @@ export default function Foodbelt() {
     } 
   }
   console.log(totalNumberOfPlate())
+
+  //remove plates from platter at random
+
+  
   
   return (
     <>hello i am food belt component</>
