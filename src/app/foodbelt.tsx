@@ -32,43 +32,78 @@ export default function Foodbelt() {
   }  
   addPlateToBelt("eggDish", plateOne)
 
-  const  beltplatekeys: string[] = Object.keys(plateBelt[0]);
-   
+  
   // //remove oldest or random plate from the belt
-  async function removePlateFromBelt(plateIndex:number):Promise<void>{
+  async function removeOldPlate(){
+    const  beltplatekeys: string[] = Object.keys(plateBelt[0]); 
     if (beltplatekeys.length != 0) {
       //remove element based on index
-      delete plateBelt[0][beltplatekeys[plateIndex]]
+      delete plateBelt[0][beltplatekeys[0]]
     }
   }
   
-  async function removeOldPlate() {
-    setInterval(async () => {
-      await removeOldPlate(0);
-    }, 10)
+
+  //remove random plate fromthe belt
+  async function removeRandomPlate() {
+    const  beltplatekeys: string[] = Object.keys(plateBelt[0]); 
+    if (beltplatekeys.length != 0){
+      const max = beltplatekeys.length - 1;
+      const min = 0;
+      const randomIndex = Math.floor(Math.random() * (max - min + 1)) + min;
+      console.log(randomIndex)
+      delete plateBelt[0][beltplatekeys[randomIndex]]
+    }
   }
   
 
+  //generate random seconds
+  const generateRandomSeconds=():number=>{
+    const min:number = 10;
+    const max:number = 20;
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+
+  // //remove random plate at random seconds 
+  async function removeDelayedFunction(delayedFunctionParam:()=>Promise<void>,interval:number) {
+    
+    setInterval(
+      async ()=>{
+        await delayedFunctionParam();
+      }, interval);
+  }
+  
+  async function addRemoveDelayedFunctions(delayedFunctionParam: () => Promise<void>, interval: number):number {
+    return setInterval(async () => {
+      await delayedFunctionParam();
+    }, interval);
+  }
+ addRemoveDelayedFunctions(removeOldPlate,1000)
+  
+  
     
   //list the number of plates in the belt 
-  function totalNumberOfPlate():PlateStats{
-  
+  function totalNumberOfPlate():void{
+
+    const  remainingBeltkeys: string[] = Object.keys(plateBelt[0]); 
+
     const uniqueFood: Set<string> = new Set(); 
 
     //loop through the plates to access unique food, add them to set of unique food
-    for (let index = 0; index < beltplatekeys.length; index++) {
-      const foodOnPlate: Set<string> = plateBelt[0][beltplatekeys[index]].food;
-      foodOnPlate.forEach((foodType) => {
-        uniqueFood.add(foodType);
-      })
-    }
+    for (let index = 0; index < remainingBeltkeys.length; index++) {
+       
+      console.log(plateBelt[0][remainingBeltkeys[index]]['food'])
 
-    return{
-      platesTotal: beltplatekeys.length,
-      uniqueFoodTotal: uniqueFood.size
-    } 
+      // foodOnPlate.forEach((foodType) => {
+      //   uniqueFood.add(foodType);
+      // })
+    }
+    // return{
+    //   platesTotal: beltplatekeys.length,
+    //   uniqueFoodTotal: uniqueFood.size
+    // } 
   }
-  console.log(totalNumberOfPlate())
+
+  totalNumberOfPlate()
 
   //remove plates from platter at random
 
