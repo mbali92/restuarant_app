@@ -1,24 +1,23 @@
-import React from 'react'
+import React from 'react';
 import { FoodPlatter } from './model/FoodPlatter';
 import { randomBytes } from 'crypto';
 
 type PlatebellRecord = Record<string,FoodPlatter>
 
-interface PlatesContentProps{
-    record:PlatebellRecord
+interface PlatesContentProps {
+  record: PlatebellRecord;
+  removeFoodFun: (plateFood: string, foodType: string) => void;
 }
 
-
-const Fooditems:React.FC<PlatesContentProps>=({record})=>{
+const Fooditems:React.FC<PlatesContentProps>=({record,removeFoodFun})=>{
+ 
   const plateNames: string[]= Object.keys(record)
 
   let foodArray:string[][] = [];
-  //will store food for each plate
-  let singleFoodArray:string[] = [];
 
   plateNames.map((platevalue,platekey)=>{
     //clear food for each plate first 
-    singleFoodArray = [];
+    const singleFoodArray:string[] = [];
     record[platevalue].food.forEach((value)=>
       singleFoodArray.push(value)
     )
@@ -36,7 +35,10 @@ const Fooditems:React.FC<PlatesContentProps>=({record})=>{
                 <div className="food_content">
                   {
                   plateContainer.map((food,foodkey)=>
-                    <p className='food_name' key={foodkey}>{food}</p>)
+                    <p className='food_name' key={foodkey}>
+                      <span>{food}</span>
+                      <i onClick={()=>removeFoodFun(plateNames[plateKey],food)}  className="lni lni-close"></i>
+                    </p>)
                   }
                 </div>
               </div>

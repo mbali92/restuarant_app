@@ -1,6 +1,8 @@
+@import url("https://cdn.lineicons.com/4.0/lineicons.css");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
 
 :root {
   --foreground-rgb: 0, 0, 0;
@@ -10,10 +12,21 @@
 
 body{
   padding: 30px;
+  height: 100%;
 }
 .navbar {
-
+  position: relative;
+  padding:10px 0;
 }
+#nav_link_bg{
+  position: absolute;
+  top: 0;
+  transition: all 300ms;
+  height: 44px;
+  display: block;
+  background-color: #f1f1f1;
+}
+
 .home-title{
   margin-bottom: 40px;
 }
@@ -23,19 +36,41 @@ body{
 .home-title h1{
   font-size: 35px;
 }
-.navbar .nav_links{
-  padding:10px 50px;
+.navbar p{
   display: inline-block;
   font-size: 16px;
+  z-index: 1;
+  cursor: pointer;
+  padding: 0 20px;
+  position: relative;
 }
-.navbar .active{
-  background-color: #f1f1f1;
+.navbar p:nth-child(1){
+  width: 150px;
 }
+.navbar p:nth-child(1):hover ~ #nav_link_bg{
+  left:0;
+  width:150px;
+}
+.navbar p:nth-child(2){
+  width: 160px;
+}
+.navbar p:nth-child(2):hover ~ #nav_link_bg{
+  left:160px;
+  width:160px;
+}
+.navbar p:nth-child(3){
+  width: 170px;
+}
+.navbar p:nth-child(3):hover ~ #nav_link_bg{
+  left:310px;
+  width:170px;
+}
+
+
 .page-container{
   border: 1px solid #f1f1f1;
   padding: 3rem 2rem;
   height: 100%;
-  width: 100%;
 }
 .section_title{
   font-size: 15px;
@@ -45,6 +80,7 @@ body{
   display: flex;
   flex-direction: row;
   width: 100%;
+  flex-wrap: wrap;
 }
 .food_stats{
   margin-top: 2rem;
@@ -69,6 +105,7 @@ body{
   box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
   background-color: #fff;
   margin-right: 20px;
+  margin-bottom: 20px;
 }
 .plate-name span{
   border-radius: 100%;
@@ -88,16 +125,28 @@ body{
   left: -4px;
   border-radius: 100%;
 }
-.plate_images{
+.plate_card{
   width: 250px;
-  height: 240px;
-  margin-right: 20px;
   box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
-  border: 15px solid #fff;
+  padding: 10px;
+  margin-right: 20px;
+  margin-bottom: 20px;
 }
+.plate_card span{
+  margin-top: 13px;
+  display: block;
+  font-size: 14px;
+  text-transform: capitalize;
+}
+.plate_images{ 
+  height: 200px;
+  width: 100%;
+}
+
 .food_card{
   width: 23%;
   margin-right: 35px;
+ margin-bottom: 2rem;
 }
 .food_card h1{
   font-size: 15px;
@@ -108,9 +157,23 @@ body{
 .food_content p{
  font-size: 13px;
  text-transform: capitalize;
+ display: flex;
+ align-items: center;
+ justify-content: space-between;
  line-height: 40px;
  border-bottom: 2px dotted #ccc;
+ cursor: pointer;
 }
+.food_content p i{
+  display: block;
+  color: red;
+  opacity: 0;
+  font-size: 11px;
+  transition: opacity 1s;
+}
+.food_content p:hover i{
+  opacity: 1;
+ }
 /* @layer utilities {
   .text-balance {
     text-wrap: balance;
