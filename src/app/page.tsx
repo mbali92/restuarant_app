@@ -1,9 +1,9 @@
-import Foodbelt from "./foodbelt";
+import FoodBelt from "./components/FoodBelt";
 
 export default function Home() {
   return (
     <main>
-      <Foodbelt/>
+      <FoodBelt />
     </main>
   );
 }

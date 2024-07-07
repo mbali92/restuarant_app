@@ -1,5 +1,5 @@
 import React from 'react';
-import { FoodPlatter } from './model/FoodPlatter';
+import { FoodPlatter } from '../model/FoodPlatter';
 import { randomBytes } from 'crypto';
 
 type PlatebellRecord = Record<string,FoodPlatter>

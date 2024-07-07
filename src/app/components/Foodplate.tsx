@@ -1,10 +1,10 @@
 import React from 'react'
-import { FoodPlatter } from './model/FoodPlatter'
+import { FoodPlatter } from '../model/FoodPlatter'
 
 type PlatebellRecord = Record<string,FoodPlatter>
 
 interface PlatesContentProps{
-    record:PlatebellRecord
+    record:PlatebellRecord,
 }
 
 
