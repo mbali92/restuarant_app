@@ -1,17 +1,18 @@
 
 'use client';
-import React,{useState,useEffect,createContext} from 'react'
+import React,{useState,useEffect} from 'react'
 import { useTimeout } from 'react-use';
-import { BeltPlate, PlateRecord } from '../types/Projecttypes';
-import { plateData } from '../database/PlateItems';
-import { FoodPlatter } from '../model/FoodPlatter';
+import { BeltPlate, PlateRecord, PlateStats } from '../types/Projecttypes';
+import Foodplate from './Foodplate';
 import Platebelt from './Platebelt';
+import Fooditems from './Fooditems';
 
 
 function FoodBelt  () {
     const [beltOfPLates, setBelofPlates] = useState<PlateRecord>({});
     const [plateIndex, setplateIndex] = useState<number>(0);
     const [showPage, setShowPage] = useState<string>("belt");
+    const [beltStats, setbeltStats] = useState<PlateStats>();
    
     //call add function api
     async function addPlates() {
@@ -41,9 +42,12 @@ function FoodBelt  () {
     const generateRandomSeconds=():number=>{
       const min:number = 10;
       const max:number = 20;
-      return Math.floor(Math.random() * (max - min + 1)) + min;
+      const seconds = Math.floor(Math.random() * (max - min + 1)) + min;
+     
+      const addZeros:string = seconds.toString() + "000";
+      const intSeconds:number = parseInt(addZeros);
+      return intSeconds;
     }
-  
     //call remove old plate api function
     async function removeOldPlates() {
       try{
@@ -79,21 +83,51 @@ function FoodBelt  () {
           }
         )
         if(response.ok){
-            const updatedBelt:PlateRecord = JSON.parse(await response.json()); 
-          
+          const updatedBelt:PlateRecord = await response.json(); 
+          const updatedBeltCopy = {...updatedBelt };
+          setBelofPlates(updatedBeltCopy)
         }
       }catch{
         console.error("object could not be removed")
       }
     } 
-    // function deleteFood(plateType:string,foodType:string){
-    //   const remainingFoodPlate ={...beltOfPLates[0]}
-    //   remainingFoodPlate[plateType].food.filter(foodItem=>foodItem != foodType);
-    //   setBelofPlates([remainingFoodPlate])
-    // }
+
+    //get number of plates in the belt
+    function getPlatesStats():PlateStats{
+      const  remainingBeltkeys: string[] = Object.keys(beltOfPLates);
+      if(remainingBeltkeys.length){
+        const uniqueFood: Set<string> = new Set(); 
+        //loop through the plates to access unique food, add them to set of unique food
+        for (let index = 0; index < remainingBeltkeys.length; index++) {
+          const foodOnPlate:string[] = beltOfPLates[remainingBeltkeys[index]].food;
+          foodOnPlate.forEach((foodType) => {
+            uniqueFood.add(foodType);
+          })
+        }
+        return{
+          platesTotal: remainingBeltkeys.length,
+          uniqueFoodTotal: uniqueFood.size
+        } 
+      }
+      return {
+        platesTotal: 0,
+        uniqueFoodTotal: 0
+      }
+  } 
+
+    //remove food from plate
+    function deleteFood(plateType:string,foodType:string){
+      const remainingFoodPlate ={...beltOfPLates}
+      remainingFoodPlate[plateType].food.filter(foodItem=>foodItem != foodType);
+      setBelofPlates({...remainingFoodPlate})
+    }
+
+    //call methods based on certain time 
     useEffect(() => {
+        
         setTimeout(addPlates,4000)
-        setTimeout(removeOldPlates,10000)
+        setTimeout(removeRandomPlates,generateRandomSeconds());
+        
         return () => {
         }
       }, [beltOfPLates]);
@@ -111,12 +145,12 @@ function FoodBelt  () {
       <span id='nav_link_bg'></span>
     </div>
     <div style={{ display: showPage === "belt" ? "block" :"none"}}><Platebelt  record={beltOfPLates}/></div>
-    {/* <div style={{ display: showPage === "plate" ? "block" :"none"}}><Foodplate  record={platesContent}/></div> */}
-    {/* <div style={{ display: showPage === "food" ? "block" :"none"}} ><Fooditems record={platesContent} removeFoodFun={deleteFood}/></div> */}
+    <div style={{ display: showPage === "plate" ? "block" :"none"}}><Foodplate  record={beltOfPLates} /></div>
+    <div style={{ display: showPage === "food" ? "block" :"none"}} ><Fooditems record={beltOfPLates} removeFoodFun={deleteFood}/></div>
     <div className="food_stats">
         <h6>Plate counter:</h6>
-        <p>Number of plates in the belt :<span> </span> </p>
-        <p>Total number of unique food: <span></span> </p> 
+        <p>Number of plates in the belt :<span>{getPlatesStats().platesTotal}</span> </p>
+        <p>Total number of unique food: <span>{getPlatesStats().uniqueFoodTotal}</span> </p> 
     </div>
     </>   
   )

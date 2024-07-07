@@ -65,8 +65,6 @@ body{
   left:310px;
   width:170px;
 }
-
-
 .page-container{
   border: 1px solid #f1f1f1;
   padding: 3rem 2rem;
@@ -173,7 +171,36 @@ body{
 }
 .food_content p:hover i{
   opacity: 1;
- }
+}
+.animate {
+  animation: animate 0.5s;
+}
+
+@keyframes animate {
+  0% {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+.animate-leave {
+  animation: leave 0.1s;
+}
+
+@keyframes leave {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+}
+
 /* @layer utilities {
   .text-balance {
     text-wrap: balance;

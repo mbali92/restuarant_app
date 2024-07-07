@@ -1,40 +1,29 @@
-import React from 'react';
-import { FoodPlatter } from '../model/FoodPlatter';
-import { randomBytes } from 'crypto';
+import React,{useEffect,useState} from 'react'
+import { FoodProps } from '../types/Projecttypes';
 
-type PlatebellRecord = Record<string,FoodPlatter>
 
-interface PlatesContentProps {
-  record: PlatebellRecord;
-  removeFoodFun: (plateFood: string, foodType: string) => void;
-}
-
-const Fooditems:React.FC<PlatesContentProps>=({record,removeFoodFun})=>{
- 
+const Fooditems:React.FC<FoodProps>=({record,removeFoodFun})=>{
   const plateNames: string[]= Object.keys(record)
-
-  let foodArray:string[][] = [];
-
-  plateNames.map((platevalue,platekey)=>{
-    //clear food for each plate first 
-    const singleFoodArray:string[] = [];
-    record[platevalue].food.forEach((value)=>
-      singleFoodArray.push(value)
-    )
-    foodArray.push(singleFoodArray)
-  }
-  )
+  const [animate, setAnimate] = useState(false);
+  
+  useEffect(() => {
+    setAnimate(true);
+    setTimeout(() => {
+      setAnimate(false);
+    }, 500);
+  }, [record]);
+      
   return(
      <div className='page-container'>
         <h6 className="section_title">Our food per plate </h6>
-        <div className="section_row">
+        <div className={`section_row ${animate ? 'animate' : ''}`}>
           {
-            foodArray.map((plateContainer,plateKey)=>
+            plateNames.map((plateContainer,plateKey)=>
               <div className='food_card'key={plateKey}>
                  <h1>{plateNames[plateKey]}:</h1>
                 <div className="food_content">
                   {
-                  plateContainer.map((food,foodkey)=>
+                    record[plateContainer].food.map((food,foodkey)=>
                     <p className='food_name' key={foodkey}>
                       <span>{food}</span>
                       <i onClick={()=>removeFoodFun(plateNames[plateKey],food)}  className="lni lni-close"></i>

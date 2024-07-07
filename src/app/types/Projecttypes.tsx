@@ -1,6 +1,5 @@
 import { FoodPlatter } from "../model/FoodPlatter"
 
-
 type DishType = {
     dishName:string,
     dish:FoodPlatter,
@@ -11,5 +10,11 @@ type PlateStats = {
     platesTotal: number,
     uniqueFoodTotal: number
 }
-  
-export type {DishType, PlateRecord,PlateStats,BeltPlate}
+interface PlatesContentProps{
+    record:PlateRecord
+}  
+interface FoodProps {
+    record: PlateRecord;
+    removeFoodFun: (plateFood: string, foodType: string) => void;
+  }
+export type {DishType, PlateRecord,PlateStats,BeltPlate,PlatesContentProps,FoodProps}

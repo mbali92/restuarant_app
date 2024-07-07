@@ -35,26 +35,5 @@ function removeRandomPlate(remainingDishes:PlateRecord):PlateRecord{
 }
   
 //list the number of plates in the belt 
-function getPlatesStats(beltPlates:PlateRecord):PlateStats{
-    const  remainingBeltkeys: string[] = Object.keys(beltPlates);
 
-    if(remainingBeltkeys.length){
-      const uniqueFood: Set<string> = new Set(); 
-      //loop through the plates to access unique food, add them to set of unique food
-      for (let index = 0; index < remainingBeltkeys.length; index++) {
-        const foodOnPlate:string[] = beltPlates[remainingBeltkeys[index]].food;
-        foodOnPlate.forEach((foodType) => {
-          uniqueFood.add(foodType);
-        })
-      }
-      return{
-        platesTotal: remainingBeltkeys.length,
-        uniqueFoodTotal: uniqueFood.size
-      } 
-    }
-    return {
-      platesTotal: 0,
-      uniqueFoodTotal: 0
-    }
-} 
-export{addPlateToBelt, removeOldPlate, removeRandomPlate, getPlatesStats} 
+export{addPlateToBelt, removeOldPlate, removeRandomPlate} 
