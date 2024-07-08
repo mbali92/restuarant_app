@@ -127,6 +127,7 @@ function FoodBelt  () {
         
         setTimeout(addPlates,4000)
         setTimeout(removeRandomPlates,generateRandomSeconds());
+        setTimeout(removeOldPlates,10000)
         
         return () => {
         }
