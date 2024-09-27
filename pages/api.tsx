@@ -1,13 +1,11 @@
 
 import { NextApiRequest,NextApiResponse} from "next";
-import { FoodPlatter } from "@/app/model/FoodPlatter";
-import { stringify } from "querystring";
-import { addPlateToBelt, removeOldPlate,removeRandomPlate,getPlatesStats} from "@/app/services/BeltService";
+import { addPlateToBelt, removeOldPlate,removeRandomPlate} from "@/app/services/BeltService";
 
 
 export default function handler(req: NextApiRequest,res: NextApiResponse) {
     const {method,body,query} = req;
-    const {action,id} = query;
+    const {action,id} = query; 
 
     switch(method){
         case 'PUT':
@@ -22,10 +20,6 @@ export default function handler(req: NextApiRequest,res: NextApiResponse) {
                const removeRandomResponse = removeRandomPlate(body)  
                res.status(200).json(removeRandomResponse) 
             }
-            break;
-        case 'GET':
-            const platesStatsResponse = getPlatesStats(body)
-            res.status(200).json(platesStatsResponse)
             break;
     }
 }
